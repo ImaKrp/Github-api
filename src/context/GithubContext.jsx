@@ -6,15 +6,13 @@ export const GithubContext = createContext();
 export function GithubProvider({ children }) {
   const [user, setUser] = useState({});
   const [repos, setRepos] = useState([]);
-  const [repo, setRepo] = useState({});
 
   const searchUser = async (user) => {
     setUser({});
-    try {
-      const res = await api
-        .get(`users/${user}`)
-        .catch((err) => console.log(err));
 
+    const res = await api.get(`users/${user}`).catch((err) => console.log(err));
+
+    if (res?.data) {
       setUser(res?.data);
 
       const { login } = res.data;
@@ -23,9 +21,7 @@ export function GithubProvider({ children }) {
         .get(`/users/${login}/repos`)
         .catch((err) => console.log(err));
       setRepos(repos?.data);
-    } catch (e) {
-      return true;
-    }
+    } else return "/error";
   };
 
   return (

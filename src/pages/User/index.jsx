@@ -73,11 +73,15 @@ const UserPage = () => {
   const { user, repos, searchUser } = useGithub();
 
   useEffect(() => {
+    const fetchData = async () => {
+      const res = await searchUser(username);
+      if (res) navigate("/error");
+    };
+
     if (!username) {
       navigate("/error");
     } else {
-      const failed = searchUser(username);
-      if (failed) navigate("/error");
+      fetchData();
     }
   }, [username]);
 
